@@ -123,11 +123,10 @@ public class Generating : MonoBehaviour {
     public void playerSwapped(int row,int col,int desRow,int desCol){
         HashSet<Rigidbody> destroy = Globals.CheckThree(Globals.FindCube(row,col));
         destroy.UnionWith(Globals.CheckThree(Globals.FindCube(desRow,desCol)));
-        Debug.Log(destroy.Count);
         foreach (Rigidbody cube in destroy)
         {
             Globals.cubeList.Remove(cube);
-            int targetCol = cube.gameObject.GetComponent<ElementCube>().getCol();
+            int targetCol = cube.gameObject.GetComponent<ElementCube>().col;
             respawn(targetCol);
             Destroy(cube.gameObject);
         }
