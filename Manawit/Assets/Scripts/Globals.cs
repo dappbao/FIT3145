@@ -4,21 +4,17 @@ using System.Collections.Generic;
 public static class Globals {
     public enum ElementType{Light,Fire, Water, Wind, Earth, Dark};
 
-    public static List<Rigidbody> cubeList = new List<Rigidbody>(81);
+    public static List<GameObject> cubeList = new List<GameObject>(81);
 
+    public static GameObject[] backupCube = new GameObject[9];
 
-    public static Rigidbody FindCube(Vector3 position) {
-        for (int i = 0; i < cubeList.Count; i++) {
-            if (ComparePosition(cubeList[i].transform.position, position)) {
-                return cubeList[i];
-            }
+    public static GameObject FindCube(int row,int col) {
+        if (row < 0 || row > 8 || col < 0 || col > 8)
+        {
+            return null;
         }
-        return null;
-    }
-
-    public static Rigidbody FindCube(int row,int col) {
         for (int i = 0; i < cubeList.Count; i++) {
-            GameObject cur = cubeList[i].gameObject;
+            GameObject cur = cubeList[i];
 
             if (cur.GetComponent<ElementCube>().col==col && cur.GetComponent<ElementCube>().row==row) {
 
@@ -28,16 +24,16 @@ public static class Globals {
         return null;
     }
 
-    public static void Swap(Rigidbody cube1, Rigidbody cube2) {
-        Vector3 tmp = cube1.transform.position;
-        cube1.transform.position = cube2.transform.position;
-        cube2.transform.position = tmp;
-        int tmprow = cube1.GetComponent<ElementCube>().row;
-        int tmpcol = cube1.GetComponent<ElementCube>().col; 
-        cube1.GetComponent<ElementCube>().row = cube2.GetComponent<ElementCube>().row;
-        cube1.GetComponent<ElementCube>().col = cube2.GetComponent<ElementCube>().col;
-        cube2.GetComponent<ElementCube>().row = tmprow;
-        cube2.GetComponent<ElementCube>().col = tmpcol;
+    public static void Swap(GameObject cube1, GameObject cube2, int a) {
+        if (cube1 == null || cube2 == null)
+        {
+            return;
+        }
+        cube1.GetComponent<ElementCube>().setDestination(cube2.transform.position);
+        cube2.GetComponent<ElementCube>().setDestination(cube1.transform.position);
+        cube1.GetComponent<ElementCube>().setPlayerFlag(a);
+        cube2.GetComponent<ElementCube>().setPlayerFlag(a);
+
     }
 
     public static Vector3 TranformPlayerToCube(Vector3 pos){
@@ -45,105 +41,145 @@ public static class Globals {
         result += new Vector3(0.5f, -1.0f, 0.5f);
         return result;
     }
+        
+    public static HashSet<GameObject> CheckThree(GameObject cube1){
+        HashSet<GameObject> result = new HashSet<GameObject>();
+        List<GameObject> row = getRow(cube1.GetComponent<ElementCube>().row);
+        List<GameObject> col = getCol(cube1.GetComponent<ElementCube>().col);
 
-    public static bool ComparePosition(Vector3 a, Vector3 b){
-        if (Vector3.Distance(a, b) <= 0.05)
-        {
-            return true;
-        }
-        return false;
-    }
 
-    public static HashSet<Rigidbody> CheckThree(Rigidbody cube1){
-        HashSet<Rigidbody> result = new HashSet<Rigidbody>();
-        List<Rigidbody> row = getRow(cube1);
-        List<Rigidbody> col = getCol(cube1);
+        int curRow = cube1.GetComponent<ElementCube>().row;
+        int curCol = cube1.GetComponent<ElementCube>().col;
+        int start=-1,end=-1;
 
-        int countRow = 0;
-        int countCol = 0;
-        for (int i = 1; i < 9; i++)
-        {
-            if (row[i].gameObject.GetComponent<ElementCube>().type == row[i-1].gameObject.GetComponent<ElementCube>().type)
+        foreach(GameObject cube in row){
+            if (cube.GetComponent<ElementCube>().col == curCol)
             {
-                countRow += 1;
+                start = row.IndexOf(cube);
+                end = row.IndexOf(cube);
+                break;
+            }
+        }
+
+        for (int i = start; i > 0; i--)
+        {
+            if (row.Count <= i || row[i - 1].GetComponent<ElementCube>().col != row[i].GetComponent<ElementCube>().col - 1 || row[i - 1].GetComponent<ElementCube>().isLocked)
+            {
+                break;
+            }
+            else if (row[i - 1].GetComponent<ElementCube>().type == row[i].GetComponent<ElementCube>().type)
+            {
+                start -= 1;
             }
             else
             {
-                if (countRow >= 2)
-                {
-                    for (int j = 0; j <= countRow; j++)
-                    {
-                        result.Add(row[i - 1 - j]);
-                    }
-                }
-                countRow = 0;
+                break;
             }
-
-            if ((col[i].gameObject.GetComponent("ElementCube") as ElementCube).type == (col[i-1].gameObject.GetComponent("ElementCube") as ElementCube).type)
-            {
-                countCol += 1;
-            }
-            else
-            {
-                if (countCol >= 2)
-                {
-                    for (int j = 0; j <= countCol; j++)
-                    {
-                        result.Add(col[i - 1 - j]);
-                    }
-                }
-                countCol = 0;
-            }
-
-
         }
-
-        if (countCol >= 2)
+        for (int i = end; i < 8; i++)
         {
-            for (int j = 0; j <= countCol; j++)
+            if (row.Count<=i+1 ||row[i+1].GetComponent<ElementCube>().col!=row[i].GetComponent<ElementCube>().col+1 || row[i+1].GetComponent<ElementCube>().isLocked){
+                break;
+            }else if(row[i+1].GetComponent<ElementCube>().type==row[i].GetComponent<ElementCube>().type){
+                end += 1;
+            }else
             {
-                result.Add(col[8 - j]);
+                break;
             }
         }
-        if (countRow >= 2)
+
+        if (end - start >= 2)
         {
-            for (int j = 0; j <= countRow; j++)
+            for (int i = start; i <= end; i++)
             {
-                result.Add(row[8 - j]);
+                result.Add(row[i]);
             }
         }
+
+
+
+        foreach(GameObject cube in col){
+            if (cube.GetComponent<ElementCube>().row == curRow)
+            {
+                start = end = col.IndexOf(cube);
+                break;
+            }
+        }
+        for (int i = start; i > 0; i--)
+        {
+            if (col.Count<=i || col[i-1].GetComponent<ElementCube>().row!=col[i].GetComponent<ElementCube>().row-1 || col[i-1].GetComponent<ElementCube>().isLocked){
+                break;
+            }else if(col[i-1].GetComponent<ElementCube>().type==col[i].GetComponent<ElementCube>().type){
+                start -= 1;
+            }else
+            {
+                break;
+            }
+        }
+        for (int i = end; i < 8; i++)
+        {
+            if (col.Count<=i+1 ||col[i+1].GetComponent<ElementCube>().row!=col[i].GetComponent<ElementCube>().row+1 || col[i+1].GetComponent<ElementCube>().isLocked){
+                break;
+            }else if(col[i+1].GetComponent<ElementCube>().type==col[i].GetComponent<ElementCube>().type){
+                end += 1;
+            }else
+            {
+                break;
+            }
+        }
+
+        if (end - start >= 2)
+        {
+            for (int i = start; i <= end; i++)
+            {
+                result.Add(col[i]);
+            }
+        }
+
 
         return result;
     }
 
+    public static void CubeDrop(int col){
+        List<GameObject> colList = getCol(col);
+        foreach (GameObject cube in colList)
+        {
+            if (!cube.GetComponent<ElementCube>().isLocked && cube.GetComponent<ElementCube>().row != 0 && Globals.FindCube(cube.GetComponent<ElementCube>().row - 1, col) == null)
+            {
+                cube.GetComponent<ElementCube>().setDestination(cube.GetComponent<ElementCube>().getDestination() + new Vector3(0.0f, 0.0f, -1.0f));
+            }
+        }
+
+    }
 
 
-
-    private static List<Rigidbody> getRow(Rigidbody cube){
-        List<Rigidbody> result = new List<Rigidbody>();
+    private static List<GameObject> getRow(int row){
+        List<GameObject> result = new List<GameObject>();
         for (int i = 0; i < cubeList.Count; i++) {
-            if (cubeList[i].gameObject.GetComponent<ElementCube>().row==cube.gameObject.GetComponent<ElementCube>().row) {
+            if (cubeList[i].GetComponent<ElementCube>().row==row) {
                 result.Add(cubeList[i]);
             }
         }
-        result.Sort(delegate(Rigidbody x, Rigidbody y)
+        result.Sort(delegate(GameObject x, GameObject y)
             {
-                return x.gameObject.GetComponent<ElementCube>().col.CompareTo(y.gameObject.GetComponent<ElementCube>().col);
+                return x.GetComponent<ElementCube>().col.CompareTo(y.GetComponent<ElementCube>().col);
             });
         return result;
     }
 
-    private static List<Rigidbody> getCol(Rigidbody cube){
-        List<Rigidbody> result = new List<Rigidbody>();
+    public static List<GameObject> getCol(int col){
+        List<GameObject> result = new List<GameObject>();
         for (int i = 0; i < cubeList.Count; i++) {
-            if (cubeList[i].gameObject.GetComponent<ElementCube>().col==cube.gameObject.GetComponent<ElementCube>().col) {
+            if (cubeList[i].GetComponent<ElementCube>().col==col) {
                 result.Add(cubeList[i]);
             }
         }
-        result.Sort(delegate(Rigidbody x, Rigidbody y)
+        result.Sort(delegate(GameObject x, GameObject y)
             {
-                return x.gameObject.GetComponent<ElementCube>().row.CompareTo(y.gameObject.GetComponent<ElementCube>().row);
+                return x.GetComponent<ElementCube>().row.CompareTo(y.GetComponent<ElementCube>().row);
             });
         return result;
     }
+
+
 }

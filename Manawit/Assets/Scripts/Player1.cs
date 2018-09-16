@@ -81,8 +81,7 @@ public class Player1 : MonoBehaviour {
             {
                 int desRow = row + tmpRow;
                 int desCol = col + tmpCol;
-                Globals.Swap(Globals.FindCube(row,col),Globals.FindCube(desRow,desCol));
-                generateManager.GetComponent<Generating>().playerSwapped(row, col, desRow, desCol);
+                Globals.Swap(Globals.FindCube(row,col),Globals.FindCube(desRow,desCol), 1);
             }
             if (pressSelect||pressUp||pressDown||pressLeft||pressRight)
             {

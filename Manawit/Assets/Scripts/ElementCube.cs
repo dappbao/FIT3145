@@ -13,20 +13,46 @@ public class ElementCube : MonoBehaviour {
     public bool isLocked;
     public int row;
     public int col;
+    public GameObject generatingManager;
+
+    private bool player1Flag=false;
+    private bool player2Flag = false;
 	// Use this for initialization
 	void Start () {
         isLocked = false;
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-//        if (this.destination != null && this.gameObject.transform.position != this.destination) {
-//            Vector3 direction = Vector3.Normalize(this.destination - this.gameObject.transform.position);
-//            this.gameObject.transform.position += direction * speed;
-//            
+        if (Vector3.Distance(this.transform.position, this.destination) < 0.1)
+        {
+            this.transform.position = this.destination;
+
+            this.isLocked = false;
+            if (this.player1Flag || this.player2Flag)
+            {
+                this.generatingManager.GetComponent<Generating>().playerSwapped(this.row, this.col);
+                this.player1Flag = false;
+                this.player2Flag = false;
+            }
+
+        }
+        else
+        {
+            Vector3 direction = Vector3.Normalize(this.destination - this.transform.position);
+            this.transform.position += direction * speed* Time.deltaTime;
+
+        }
+
+//        if (!isLocked && row != 0 && Globals.FindCube(row - 1, col) == null)
+//        {
+//            this.destination += new Vector3(0.0f, 0.0f, -1.0f);
+//            this.isLocked = true;
 //        }
-        row=Mathf.RoundToInt((float)(this.gameObject.transform.position.z+3));
-        col=Mathf.RoundToInt((float)(this.gameObject.transform.position.x+3));
+
+        row=Mathf.RoundToInt((float)(this.transform.position.z+3));
+        col=Mathf.RoundToInt((float)(this.transform.position.x+3));
 
 	}
 
@@ -34,22 +60,22 @@ public class ElementCube : MonoBehaviour {
         switch (type)
         {
             case Globals.ElementType.Light:
-                this.gameObject.GetComponent<Renderer>().material.color = Color.yellow;
+                this.GetComponent<Renderer>().material.color = Color.yellow;
                 break;
             case Globals.ElementType.Fire:
-                this.gameObject.GetComponent<Renderer>().material.color = Color.red;
+                this.GetComponent<Renderer>().material.color = Color.red;
                 break;
             case Globals.ElementType.Water:
-                this.gameObject.GetComponent<Renderer>().material.color = Color.blue;
+                this.GetComponent<Renderer>().material.color = Color.blue;
                 break;
             case Globals.ElementType.Wind:
-                this.gameObject.GetComponent<Renderer>().material.color = Color.green;
+                this.GetComponent<Renderer>().material.color = Color.green;
                 break;
             case Globals.ElementType.Earth:
-                this.gameObject.GetComponent<Renderer>().material.color = Color.gray;
+                this.GetComponent<Renderer>().material.color = Color.gray;
                 break;
             case Globals.ElementType.Dark:
-                this.gameObject.GetComponent<Renderer>().material.color = Color.black;
+                this.GetComponent<Renderer>().material.color = Color.black;
                 break;
         }
 
@@ -60,7 +86,20 @@ public class ElementCube : MonoBehaviour {
     public void setDestination(Vector3 dest) {
         this.destination = dest;
     }
+    public Vector3 getDestination(){
+        return this.destination;
+    }
 
-
+    public void setPlayerFlag(int a){
+        switch (a)
+        {
+            case 1:
+                this.player1Flag = true;
+                break;
+            case 2:
+                this.player2Flag = true;
+                break;
+        }
+    }
 
 }
