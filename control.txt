@@ -1,0 +1,4 @@
+use wasd and space to control player 1 (white)
+use arrow keys and numpad 0 to control player 2 (cyan)
+press G to generate the puzzle
+minor bugs may appear, please ignore them.(?)
