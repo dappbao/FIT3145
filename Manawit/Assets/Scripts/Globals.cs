@@ -16,7 +16,7 @@ public static class Globals {
         for (int i = 0; i < cubeList.Count; i++) {
             GameObject cur = cubeList[i];
 
-            if (cur.GetComponent<ElementCube>().col==col && cur.GetComponent<ElementCube>().row==row) {
+            if (cur.GetComponent<ElementCube>().col==col && cur.GetComponent<ElementCube>().row==row && !cur.GetComponent<ElementCube>().isLocked) {
 
                 return cubeList[i];
             }
@@ -25,7 +25,7 @@ public static class Globals {
     }
 
     public static void Swap(GameObject cube1, GameObject cube2, int a) {
-        if (cube1 == null || cube2 == null)
+        if (cube1 == null || cube2 == null || cube1.GetComponent<ElementCube>().isLocked || cube2.GetComponent<ElementCube>().isLocked)
         {
             return;
         }
@@ -33,7 +33,8 @@ public static class Globals {
         cube2.GetComponent<ElementCube>().setDestination(cube1.transform.position);
         cube1.GetComponent<ElementCube>().setPlayerFlag(a);
         cube2.GetComponent<ElementCube>().setPlayerFlag(a);
-
+        cube1.GetComponent<ElementCube>().isLocked = true;
+        cube2.GetComponent<ElementCube>().isLocked = true;
     }
 
     public static Vector3 TranformPlayerToCube(Vector3 pos){
@@ -140,17 +141,7 @@ public static class Globals {
         return result;
     }
 
-    public static void CubeDrop(int col){
-        List<GameObject> colList = getCol(col);
-        foreach (GameObject cube in colList)
-        {
-            if (!cube.GetComponent<ElementCube>().isLocked && cube.GetComponent<ElementCube>().row != 0 && Globals.FindCube(cube.GetComponent<ElementCube>().row - 1, col) == null)
-            {
-                cube.GetComponent<ElementCube>().setDestination(cube.GetComponent<ElementCube>().getDestination() + new Vector3(0.0f, 0.0f, -1.0f));
-            }
-        }
 
-    }
 
 
     private static List<GameObject> getRow(int row){

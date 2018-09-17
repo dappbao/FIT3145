@@ -15,12 +15,11 @@ public class ElementCube : MonoBehaviour {
     public int col;
     public GameObject generatingManager;
 
-    private bool player1Flag=false;
-    private bool player2Flag = false;
+    private int playerFlag;
 	// Use this for initialization
 	void Start () {
         isLocked = false;
-
+        playerFlag = 0;
 	}
 	
 	// Update is called once per frame
@@ -30,11 +29,10 @@ public class ElementCube : MonoBehaviour {
             this.transform.position = this.destination;
 
             this.isLocked = false;
-            if (this.player1Flag || this.player2Flag)
+            if (this.playerFlag!=0)
             {
-                this.generatingManager.GetComponent<Generating>().playerSwapped(this.row, this.col);
-                this.player1Flag = false;
-                this.player2Flag = false;
+                this.generatingManager.GetComponent<Generating>().playerSwapped(this.gameObject,this.playerFlag);
+
             }
 
         }
@@ -91,15 +89,10 @@ public class ElementCube : MonoBehaviour {
     }
 
     public void setPlayerFlag(int a){
-        switch (a)
-        {
-            case 1:
-                this.player1Flag = true;
-                break;
-            case 2:
-                this.player2Flag = true;
-                break;
-        }
+        this.playerFlag = a;
+    }
+    public int getPlayerFlag(){
+        return this.playerFlag;
     }
 
 }

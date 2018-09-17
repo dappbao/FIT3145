@@ -9,10 +9,14 @@ public class Player1 : MonoBehaviour {
     private int row;
     private int col;
     public GameObject generateManager;
+    private int id;
+    public int score;
 	// Use this for initialization
 	void Start () {
+        id = 1;
         this.gameObject.GetComponent<Renderer>().material.color = Color.white;
         this.selection = new GameObject[4];
+        score = 0;
 	}
 	
 	// Update is called once per frame
@@ -50,10 +54,6 @@ public class Player1 : MonoBehaviour {
                 GameObject instance2 = Instantiate(pipePrefab, this.gameObject.transform.position+new Vector3(0.0f,0.0f,-1.0f), this.gameObject.transform.rotation);
                 GameObject instance3 = Instantiate(pipePrefab, this.gameObject.transform.position+new Vector3(1.0f,0.0f,0.0f), this.gameObject.transform.rotation);
                 GameObject instance4 = Instantiate(pipePrefab, this.gameObject.transform.position+new Vector3(-1.0f,0.0f,0.0f), this.gameObject.transform.rotation);
-                instance1.GetComponent<Player1>().enabled= false;
-                instance2.GetComponent<Player1>().enabled= false;
-                instance3.GetComponent<Player1>().enabled= false;
-                instance4.GetComponent<Player1>().enabled= false;
                 selection[0] = instance1;
                 selection[1] = instance2;
                 selection[2] = instance3;
@@ -81,7 +81,7 @@ public class Player1 : MonoBehaviour {
             {
                 int desRow = row + tmpRow;
                 int desCol = col + tmpCol;
-                Globals.Swap(Globals.FindCube(row,col),Globals.FindCube(desRow,desCol), 1);
+                Globals.Swap(Globals.FindCube(row,col),Globals.FindCube(desRow,desCol), id);
             }
             if (pressSelect||pressUp||pressDown||pressLeft||pressRight)
             {
@@ -96,4 +96,8 @@ public class Player1 : MonoBehaviour {
         row=Mathf.RoundToInt((float)(this.gameObject.transform.position.z+3.5));
 	}
 
+
+    public int getId(){
+        return this.id;
+    }
 }

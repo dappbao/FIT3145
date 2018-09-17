@@ -7,6 +7,8 @@ public class Generating : MonoBehaviour {
     public GameObject cubePrefab;
     private HashSet<GameObject> destroy;
     private bool startFlag;
+    public GameObject player1;
+    public GameObject player2;
 
 	// Use this for initialization
 	void Start () {
@@ -31,9 +33,11 @@ public class Generating : MonoBehaviour {
                     if (Globals.backupCube[i]!=null){
                         GameObject current = Globals.backupCube[i];
                         Globals.backupCube[i] = null;
-                        Globals.cubeList.Add(current);
+
                         current.GetComponent<BackupCube>().enabled = false;
                         current.GetComponent<ElementCube>().enabled = true;
+
+                        Globals.cubeList.Add(current);
 
                     }
                 }
@@ -64,23 +68,41 @@ public class Generating : MonoBehaviour {
 //                int targetCol = cube.GetComponent<ElementCube>().col;
 //                int targetRow = cube.GetComponent<ElementCube>().row;
 //                respawn(targetRow,targetCol);
-
+                if(cube.GetComponent<ElementCube>().getPlayerFlag()==1){
+                    player1.GetComponent<Player1>().score += 1;
+                }else if(cube.GetComponent<ElementCube>().getPlayerFlag()==2){
+                    player2.GetComponent<Player2>().score += 1;
+                }
                 Destroy(cube);
             }
             this.destroy.Clear();
+            foreach (GameObject cube in Globals.cubeList)
+            {
+                if (!cube.GetComponent<ElementCube>().isLocked)
+                {
+                    cube.GetComponent<ElementCube>().setPlayerFlag(0);
+                }
+            }
         }
 
+        //handlind cube dropping
         for (int i = 0; i < 9; i++)
         {
             List<GameObject> currCol = Globals.getCol(i);
             for(int j=0;j<currCol.Count;j++){
+
                 int gap = currCol[j].GetComponent<ElementCube>().row - j;
-                if (!currCol[j].GetComponent<ElementCube>().isLocked && gap >= 1)
+                if ((!currCol[j].GetComponent<ElementCube>().isLocked) && gap >= 1)
                 {
                     for (int k = j; k < currCol.Count; k++)
                     {
-                        currCol[k].GetComponent<ElementCube>().setDestination(currCol[k].GetComponent<ElementCube>().getDestination()+new Vector3(0.0f,0.0f,(float)(-gap)));
-                        currCol[k].GetComponent<ElementCube>().isLocked = true;
+                        if (!currCol[k].GetComponent<ElementCube>().isLocked)
+                        {
+                            currCol[k].GetComponent<ElementCube>().setDestination(currCol[k].GetComponent<ElementCube>().getDestination()+new Vector3(0.0f,0.0f,(float)(-gap)));
+                            currCol[k].GetComponent<ElementCube>().isLocked = true;
+
+                        }
+
                     }
                 }
             }
@@ -176,8 +198,12 @@ public class Generating : MonoBehaviour {
         }
     }
 
-    public void playerSwapped(int row,int col){
-        destroy.UnionWith(Globals.CheckThree(Globals.FindCube(row,col)));
+    public void playerSwapped(GameObject cube,int playerflag){
+        HashSet<GameObject> curr = Globals.CheckThree(cube);
+        foreach(GameObject c in curr){
+            c.GetComponent<ElementCube>().setPlayerFlag(playerflag);
+        }
+        destroy.UnionWith(curr);
     }
 
     private void respawn(int row, int col){
