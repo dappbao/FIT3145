@@ -11,13 +11,15 @@ public class Player2 : MonoBehaviour {
     private int col;
     public GameObject generateManager;
     private int id;
-    public int score;
+    public int hp;
+    public int[] inventory;
     // Use this for initialization
     void Start () {
         id = 2;
         this.gameObject.GetComponent<Renderer>().material.color = new Color((float)102/255,(float)204/255,1.0f,1.0f);
         this.selection = new GameObject[4];
-        score = 0;
+        hp = 20;
+        inventory = new int[]{ 0, 0, 0, 0, 0, 0 };
     }
 
     // Update is called once per frame
@@ -27,7 +29,7 @@ public class Player2 : MonoBehaviour {
         bool pressDown = Input.GetKeyDown(KeyCode.DownArrow);
         bool pressLeft = Input.GetKeyDown(KeyCode.LeftArrow);
         bool pressRight = Input.GetKeyDown(KeyCode.RightArrow);
-        bool pressSelect = Input.GetKeyDown(KeyCode.Keypad0);
+        bool pressSelect = Input.GetKeyDown(KeyCode.L);
 
 
         if(!isSelect)
@@ -104,5 +106,8 @@ public class Player2 : MonoBehaviour {
 
     public int getId(){
         return this.id;
+    }
+    public void getAnElement(Globals.ElementType element){
+        this.inventory[(int)element] += 1;
     }
 }

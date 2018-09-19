@@ -269,7 +269,6 @@ D:\manawit project\FIT3145\Manawit\Temp\bin\Debug\Unity.IvyParser.dll
 D:\manawit project\FIT3145\Manawit\Temp\bin\Debug\Boo.Lang.PatternMatching.dll
 D:\manawit project\FIT3145\Manawit\Temp\bin\Debug\Boo.Lang.Useful.dll
 D:\manawit project\FIT3145\Manawit\Temp\bin\Debug\Unity.CecilTools.dll
-D:\manawit project\FIT3145\Manawit\Temp\bin\Debug\Assembly-CSharp-firstpass.pdb
 D:\manawit project\FIT3145\Manawit\Temp\bin\Debug\UnityEngine.xml
 D:\manawit project\FIT3145\Manawit\Temp\bin\Debug\UnityEditor.xml
 D:\manawit project\FIT3145\Manawit\Temp\bin\Debug\UnityEngine.AIModule.xml
@@ -340,5 +339,3 @@ D:\manawit project\FIT3145\Manawit\Temp\bin\Debug\UnityEngine.SpatialTracking.xm
 D:\manawit project\FIT3145\Manawit\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 D:\manawit project\FIT3145\Manawit\obj\Debug\Assembly-CSharp.dll
 D:\manawit project\FIT3145\Manawit\obj\Debug\Assembly-CSharp.pdb
-D:\manawit project\FIT3145\Manawit\Temp\bin\Debug\UnityEditor.UI.dll
-D:\manawit project\FIT3145\Manawit\Temp\bin\Debug\UnityEditor.UI.xml

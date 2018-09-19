@@ -9,20 +9,20 @@ public class Generating : MonoBehaviour {
     private bool startFlag;
     public GameObject player1;
     public GameObject player2;
-
+    public float time;
 	// Use this for initialization
 	void Start () {
         destroy = new HashSet<GameObject>();
         InvokeRepeating("generateBackup", 0, 1);
         startFlag = false;
+        time = 180;
 	}
 	
 	// Update is called once per frame
 	void Update () {
         bool restart = Input.GetKeyDown(KeyCode.G);
         bool destroy = Input.GetKeyDown(KeyCode.H);
-        bool test = Input.GetKeyDown(KeyCode.O);
-
+        bool quit = Input.GetKeyDown(KeyCode.J);
         if (startFlag)
         {
             for (int i = 0; i < 9; i++)
@@ -42,6 +42,7 @@ public class Generating : MonoBehaviour {
                     }
                 }
             }
+            time -= Time.deltaTime;
         }
         if (restart){
             GenerateAll();
@@ -51,14 +52,8 @@ public class Generating : MonoBehaviour {
         {
             DestroyAll();
         }
-        if (test) {
-            Transform trans = cubePrefab.transform;
-            int randomInt = (int)Mathf.Round(Random.Range(0, 6));
-            GameObject instance = Instantiate(cubePrefab, trans.position, trans.rotation);
-            instance.GetComponent<ElementCube>().setDestination(trans.position + new Vector3(1.0f, 0.0f, 1.0f));
-            instance.GetComponent<ElementCube>().generatingManager = this.gameObject;
-            (instance.GetComponent("ElementCube") as ElementCube).type = (Globals.ElementType)randomInt;
-            (instance.GetComponent("ElementCube") as ElementCube).ChangeColor();
+        if (quit) {
+            Application.Quit();
         }
         if (this.destroy.Count != 0)
         {
@@ -69,9 +64,9 @@ public class Generating : MonoBehaviour {
 //                int targetRow = cube.GetComponent<ElementCube>().row;
 //                respawn(targetRow,targetCol);
                 if(cube.GetComponent<ElementCube>().getPlayerFlag()==1){
-                    player1.GetComponent<Player1>().score += 1;
+                    player1.GetComponent<Player1>().getAnElement(cube.GetComponent<ElementCube>().type);
                 }else if(cube.GetComponent<ElementCube>().getPlayerFlag()==2){
-                    player2.GetComponent<Player2>().score += 1;
+                    player2.GetComponent<Player2>().getAnElement(cube.GetComponent<ElementCube>().type);
                 }
                 Destroy(cube);
             }
@@ -117,7 +112,7 @@ public class Generating : MonoBehaviour {
         {
             for (int j = 0; j < 9; j++)
             {
-                int randomInt = (int)Mathf.Round(Random.Range(0, 6));
+                int randomInt = (int)Mathf.Round(Random.Range(0.0f, 5.0f));
                 GameObject instance = Instantiate(cubePrefab, trans.position+new Vector3((float)j,0.0f,-(float)i), trans.rotation);
                 instance.GetComponent<ElementCube>().setDestination(trans.position + new Vector3((float)j, 0.0f, -(float)i));
                 instance.GetComponent<ElementCube>().generatingManager = this.gameObject;
@@ -223,7 +218,7 @@ public class Generating : MonoBehaviour {
         {
             if (Globals.backupCube[i] == null)
             {
-                int randomInt = (int)Mathf.Round(Random.Range(0, 6));
+                int randomInt = (int)Mathf.Round(Random.Range(0.0f, 5.0f));
                 GameObject instance = Instantiate(cubePrefab, cubePrefab.transform.position+new Vector3((float)i,0.0f,3.0f), cubePrefab.transform.rotation);
                 instance.GetComponent<ElementCube>().setDestination(cubePrefab.transform.position + new Vector3((float)i, 0.0f, 3.0f));
                 instance.GetComponent<ElementCube>().generatingManager = this.gameObject;

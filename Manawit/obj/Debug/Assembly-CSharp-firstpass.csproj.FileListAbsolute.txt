@@ -338,5 +338,3 @@ D:\manawit project\FIT3145\Manawit\Temp\bin\Debug\UnityEngine.SpatialTracking.xm
 D:\manawit project\FIT3145\Manawit\obj\Debug\Assembly-CSharp-firstpass.csprojResolveAssemblyReference.cache
 D:\manawit project\FIT3145\Manawit\obj\Debug\Assembly-CSharp-firstpass.dll
 D:\manawit project\FIT3145\Manawit\obj\Debug\Assembly-CSharp-firstpass.pdb
-D:\manawit project\FIT3145\Manawit\Temp\bin\Debug\UnityEditor.UI.dll
-D:\manawit project\FIT3145\Manawit\Temp\bin\Debug\UnityEditor.UI.xml

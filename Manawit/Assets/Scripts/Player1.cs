@@ -10,13 +10,16 @@ public class Player1 : MonoBehaviour {
     private int col;
     public GameObject generateManager;
     private int id;
-    public int score;
+    public int hp;
+    public int[] inventory;
+
 	// Use this for initialization
 	void Start () {
         id = 1;
         this.gameObject.GetComponent<Renderer>().material.color = Color.white;
         this.selection = new GameObject[4];
-        score = 0;
+        hp = 20;
+        inventory = new int[]{ 0, 0, 0, 0, 0, 0 };
 	}
 	
 	// Update is called once per frame
@@ -99,5 +102,9 @@ public class Player1 : MonoBehaviour {
 
     public int getId(){
         return this.id;
+    }
+
+    public void getAnElement(Globals.ElementType element){
+        this.inventory[(int)element] += 1;
     }
 }

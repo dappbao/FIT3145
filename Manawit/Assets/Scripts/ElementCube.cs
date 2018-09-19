@@ -58,7 +58,7 @@ public class ElementCube : MonoBehaviour {
         switch (type)
         {
             case Globals.ElementType.Light:
-                this.GetComponent<Renderer>().material.color = Color.yellow;
+                this.GetComponent<Renderer>().material.color = Color.white;
                 break;
             case Globals.ElementType.Fire:
                 this.GetComponent<Renderer>().material.color = Color.red;
@@ -70,7 +70,7 @@ public class ElementCube : MonoBehaviour {
                 this.GetComponent<Renderer>().material.color = Color.green;
                 break;
             case Globals.ElementType.Earth:
-                this.GetComponent<Renderer>().material.color = Color.gray;
+                this.GetComponent<Renderer>().material.color = Color.yellow;
                 break;
             case Globals.ElementType.Dark:
                 this.GetComponent<Renderer>().material.color = Color.black;
