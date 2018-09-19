@@ -1,4 +1,13 @@
-use wasd and space to control player 1 (white)
-use arrow keys and numpad 0 to control player 2 (cyan)
+use wasd to control player 1 (white)
+use arrow keys to control player 2 (cyan)
+player 1 press space to select a block, then use wasd to swap with the adjacent blocks
+player 1 press L to select a block, then use wasd to swap with the adjacent blocks
 press G to generate the puzzle
-minor bugs may appear, please ignore them.(?)
+press J to quit
+
+
+minor bugs may appear, please ignore them.(?) and report to Axl.
+
+Current known bugs:
+The blocks may have a small chance to drop incorrectly, leaving a empty block in the puzzle and stacking to another block.
+
