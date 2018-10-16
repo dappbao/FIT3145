@@ -5,6 +5,13 @@ using UnityEngine;
 public class Generating : MonoBehaviour {
 
     public GameObject cubePrefab;
+    public GameObject darkPrefab;
+    public GameObject lightPrefab;
+    public GameObject firePrefab;
+    public GameObject waterPrefab;
+    public GameObject windPrefab;
+    public GameObject earthPrefab;
+
     private HashSet<GameObject> destroy;
     private bool startFlag;
     public GameObject player1;
@@ -23,6 +30,7 @@ public class Generating : MonoBehaviour {
         bool restart = Input.GetKeyDown(KeyCode.G);
         bool destroy = Input.GetKeyDown(KeyCode.H);
         bool quit = Input.GetKeyDown(KeyCode.J);
+        bool test = Input.GetKeyDown(KeyCode.I);
         if (startFlag)
         {
             for (int i = 0; i < 9; i++)
@@ -45,7 +53,7 @@ public class Generating : MonoBehaviour {
             time -= Time.deltaTime;
         }
         if (restart){
-            GenerateAll();
+            DestroyAll();
             startFlag = true;
         }
         if (destroy)
@@ -54,6 +62,10 @@ public class Generating : MonoBehaviour {
         }
         if (quit) {
             Application.Quit();
+        }
+        if (test)
+        {
+            respawn(5,5);
         }
         if (this.destroy.Count != 0)
         {
@@ -104,28 +116,30 @@ public class Generating : MonoBehaviour {
         }
 
 	}
-    void GenerateAll(){
-        
-        DestroyAll();
-        Transform trans = cubePrefab.transform;
-        for (int i = 0; i < 9; i++)
-        {
-            for (int j = 0; j < 9; j++)
-            {
-                int randomInt = (int)Mathf.Round(Random.Range(0.0f, 5.0f));
-                GameObject instance = Instantiate(cubePrefab, trans.position+new Vector3((float)j,0.0f,-(float)i), trans.rotation);
-                instance.GetComponent<ElementCube>().setDestination(trans.position + new Vector3((float)j, 0.0f, -(float)i));
-                instance.GetComponent<ElementCube>().generatingManager = this.gameObject;
-                instance.GetComponent<ElementCube>().col = j;
-                (instance.GetComponent("ElementCube") as ElementCube).type=(Globals.ElementType)randomInt;
-                (instance.GetComponent("ElementCube") as ElementCube).ChangeColor();
-                Globals.cubeList.Add(instance);
-            }
 
-        }
-        this.CheckRepeat();
-       
-    }
+//    void GenerateAll(){
+//        
+//        DestroyAll();
+//        Transform trans = cubePrefab.transform;
+//        for (int i = 0; i < 9; i++)
+//        {
+//            for (int j = 0; j < 9; j++)
+//            {
+//                int randomInt = (int)Mathf.Round(Random.Range(0.0f, 5.0f));
+//                GameObject instance = Instantiate(cubePrefab, trans.position+new Vector3((float)j,0.0f,-(float)i), trans.rotation);
+//                instance.GetComponent<ElementCube>().setDestination(trans.position + new Vector3((float)j, 0.0f, -(float)i));
+//                instance.GetComponent<ElementCube>().generatingManager = this.gameObject;
+//                instance.GetComponent<ElementCube>().col = j;
+//                (instance.GetComponent("ElementCube") as ElementCube).type=(Globals.ElementType)randomInt;
+//
+//                (instance.GetComponent("ElementCube") as ElementCube).ChangeColor();
+//                Globals.cubeList.Add(instance);
+//            }
+//
+//        }
+//        this.CheckRepeat();
+//       
+//    }
 
     void DestroyAll(){
 
@@ -139,59 +153,59 @@ public class Generating : MonoBehaviour {
         }
     }
 
-    void CheckRepeat(){
-        int RepeatCount = 0;
-        ElementCube current;
-        for (int i = 0; i < 9; i++)
-        {
-            RepeatCount = 0;
-            for (int j = 1; j < 9; j++)
-            {
-                if ((Globals.cubeList[i*9+j].GetComponent("ElementCube") as ElementCube).type == (Globals.cubeList[i*9+j-1].GetComponent("ElementCube") as ElementCube).type)
-                {
-                    RepeatCount += 1;
-                }
-                else
-                {
-                    RepeatCount = 0;
-                }
-                if (RepeatCount == 2)
-                {
-                    current = (Globals.cubeList[i*9+j-1].GetComponent("ElementCube") as ElementCube);
-                    current.type =(Globals.ElementType) ( ((int)current.type+1)%6);
-                    current.ChangeColor();
-                    RepeatCount = 0;
-
-                }
-
-            }
-        }
-
-        for (int j = 0; j < 9; j++)
-        {
-            RepeatCount = 0;
-            for (int i = 1; i < 9; i++)
-            {
-                if ((Globals.cubeList[i*9+j].GetComponent("ElementCube") as ElementCube).type == (Globals.cubeList[(i-1)*9+j].GetComponent("ElementCube") as ElementCube).type)
-                {
-                    RepeatCount += 1;
-                }
-                else
-                {
-                    RepeatCount = 0;
-                }
-                if (RepeatCount == 2)
-                {
-                    current = (Globals.cubeList[(i-1)*9+j].GetComponent("ElementCube") as ElementCube);
-                    current.type =(Globals.ElementType) ( ((int)current.type+1)%6);
-                    current.ChangeColor();
-                    RepeatCount = 0;
-
-                }
-
-            }
-        }
-    }
+//    void CheckRepeat(){
+//        int RepeatCount = 0;
+//        ElementCube current;
+//        for (int i = 0; i < 9; i++)
+//        {
+//            RepeatCount = 0;
+//            for (int j = 1; j < 9; j++)
+//            {
+//                if ((Globals.cubeList[i*9+j].GetComponent("ElementCube") as ElementCube).type == (Globals.cubeList[i*9+j-1].GetComponent("ElementCube") as ElementCube).type)
+//                {
+//                    RepeatCount += 1;
+//                }
+//                else
+//                {
+//                    RepeatCount = 0;
+//                }
+//                if (RepeatCount == 2)
+//                {
+//                    current = (Globals.cubeList[i*9+j-1].GetComponent("ElementCube") as ElementCube);
+//                    current.type =(Globals.ElementType) ( ((int)current.type+1)%6);
+//                    current.ChangeColor();
+//                    RepeatCount = 0;
+//
+//                }
+//
+//            }
+//        }
+//
+//        for (int j = 0; j < 9; j++)
+//        {
+//            RepeatCount = 0;
+//            for (int i = 1; i < 9; i++)
+//            {
+//                if ((Globals.cubeList[i*9+j].GetComponent("ElementCube") as ElementCube).type == (Globals.cubeList[(i-1)*9+j].GetComponent("ElementCube") as ElementCube).type)
+//                {
+//                    RepeatCount += 1;
+//                }
+//                else
+//                {
+//                    RepeatCount = 0;
+//                }
+//                if (RepeatCount == 2)
+//                {
+//                    current = (Globals.cubeList[(i-1)*9+j].GetComponent("ElementCube") as ElementCube);
+//                    current.type =(Globals.ElementType) ( ((int)current.type+1)%6);
+//                    current.ChangeColor();
+//                    RepeatCount = 0;
+//
+//                }
+//
+//            }
+//        }
+//    }
 
     public void playerSwapped(GameObject cube,int playerflag){
         HashSet<GameObject> curr = Globals.CheckThree(cube);
@@ -209,23 +223,79 @@ public class Generating : MonoBehaviour {
         instance.GetComponent<ElementCube>().setDestination(trans.position + new Vector3((float)col, 0.0f, 2.0f));
         instance.GetComponent<ElementCube>().generatingManager = this.gameObject;
         (instance.GetComponent("ElementCube") as ElementCube).type=(Globals.ElementType)randomInt;
-        (instance.GetComponent("ElementCube") as ElementCube).ChangeColor();
+        GameObject orb;
+        switch (instance.GetComponent<ElementCube>().type)
+        {
+            case Globals.ElementType.Light:
+                orb = Instantiate(lightPrefab);
+                orb.transform.SetParent(instance.transform);
+                break;
+            case Globals.ElementType.Fire:
+                orb = Instantiate(firePrefab);
+                orb.transform.SetParent(instance.transform);
+                break;
+            case Globals.ElementType.Water:
+                orb = Instantiate(waterPrefab);
+                orb.transform.SetParent(instance.transform);
+                break;
+            case Globals.ElementType.Wind:
+                orb = Instantiate(windPrefab);
+                orb.transform.SetParent(instance.transform);
+                break;
+            case Globals.ElementType.Earth:
+                orb = Instantiate(earthPrefab);
+                orb.transform.SetParent(instance.transform);
+                break;
+            case Globals.ElementType.Dark:
+                orb = Instantiate(darkPrefab);
+                orb.transform.SetParent(instance.transform);
+                break;
+        }
+
+
         Globals.cubeList.Add(instance);
     }
 
     private void generateBackup(){
         for (int i = 0; i < 9; i++)
         {
-            if (Globals.backupCube[i] == null)
+            if (Globals.backupCube[i] == null && Globals.CheckCubeNotExist(12,i))
             {
                 int randomInt = (int)Mathf.Round(Random.Range(0.0f, 5.0f));
-                GameObject instance = Instantiate(cubePrefab, cubePrefab.transform.position+new Vector3((float)i,0.0f,3.0f), cubePrefab.transform.rotation);
-                instance.GetComponent<ElementCube>().setDestination(cubePrefab.transform.position + new Vector3((float)i, 0.0f, 3.0f));
+                GameObject instance = Instantiate(cubePrefab, cubePrefab.transform.position+new Vector3((float)i,0.0f,4.0f), cubePrefab.transform.rotation);
+                instance.GetComponent<ElementCube>().setDestination(cubePrefab.transform.position + new Vector3((float)i, 0.0f, 4.0f));
                 instance.GetComponent<ElementCube>().generatingManager = this.gameObject;
                 instance.GetComponent<ElementCube>().type=(Globals.ElementType)randomInt;
-                instance.GetComponent<ElementCube>().ChangeColor();
                 instance.GetComponent<BackupCube>().type=(Globals.ElementType)randomInt;
-                instance.GetComponent<BackupCube>().ChangeColor();
+                GameObject orb;
+                switch (instance.GetComponent<ElementCube>().type)
+                {
+                    case Globals.ElementType.Light:
+                        orb = Instantiate(lightPrefab, cubePrefab.transform.position+new Vector3((float)i,1.5f,4.0f), cubePrefab.transform.rotation);
+                        orb.transform.SetParent(instance.transform);
+                        break;
+                    case Globals.ElementType.Fire:
+                        orb = Instantiate(firePrefab, cubePrefab.transform.position+new Vector3((float)i,1.5f,4.0f), cubePrefab.transform.rotation);
+                        orb.transform.SetParent(instance.transform);
+                        break;
+                    case Globals.ElementType.Water:
+                        orb = Instantiate(waterPrefab, cubePrefab.transform.position+new Vector3((float)i,1.5f,4.0f), cubePrefab.transform.rotation);
+                        orb.transform.SetParent(instance.transform);
+                        break;
+                    case Globals.ElementType.Wind:
+                        orb = Instantiate(windPrefab, cubePrefab.transform.position+new Vector3((float)i,1.5f,4.0f), cubePrefab.transform.rotation);
+                        orb.transform.SetParent(instance.transform);
+                        break;
+                    case Globals.ElementType.Earth:
+                        orb = Instantiate(earthPrefab, cubePrefab.transform.position+new Vector3((float)i,1.5f,4.0f), cubePrefab.transform.rotation);
+                        orb.transform.SetParent(instance.transform);
+                        break;
+                    case Globals.ElementType.Dark:
+                        orb = Instantiate(darkPrefab, cubePrefab.transform.position+new Vector3((float)i,1.5f,4.0f), cubePrefab.transform.rotation);
+                        orb.transform.SetParent(instance.transform);
+                        break;
+                }
+
                 instance.GetComponent<ElementCube>().enabled = false;
                 instance.GetComponent<BackupCube>().enabled = true;
 
@@ -234,5 +304,7 @@ public class Generating : MonoBehaviour {
         }
     }
 
+
+   
 
 }

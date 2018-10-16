@@ -24,6 +24,22 @@ public static class Globals {
         return null;
     }
 
+    public static bool CheckCubeNotExist(int row,int col) {
+        if (cubeList.Count == 0)
+        {
+            return true;
+        }
+
+        foreach (GameObject cube in cubeList)
+        {
+            if (cube.GetComponent<ElementCube>().col==col && cube.GetComponent<ElementCube>().row==row) {
+
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void Swap(GameObject cube1, GameObject cube2, int a) {
         if (cube1 == null || cube2 == null || cube1.GetComponent<ElementCube>().isLocked || cube2.GetComponent<ElementCube>().isLocked)
         {

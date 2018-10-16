@@ -16,28 +16,28 @@ public class BackupCube : MonoBehaviour {
 		
 	}
 
-    public void ChangeColor(){
-        switch (type)
-        {
-            case Globals.ElementType.Light:
-                this.GetComponent<Renderer>().material.color = Color.white;
-                break;
-            case Globals.ElementType.Fire:
-                this.GetComponent<Renderer>().material.color = Color.red;
-                break;
-            case Globals.ElementType.Water:
-                this.GetComponent<Renderer>().material.color = Color.blue;
-                break;
-            case Globals.ElementType.Wind:
-                this.GetComponent<Renderer>().material.color = Color.green;
-                break;
-            case Globals.ElementType.Earth:
-                this.GetComponent<Renderer>().material.color = Color.yellow;
-                break;
-            case Globals.ElementType.Dark:
-                this.GetComponent<Renderer>().material.color = Color.black;
-                break;
-        }
-
-    }
+//    public void ChangeColor(){
+//        switch (type)
+//        {
+//            case Globals.ElementType.Light:
+//                this.GetComponent<Renderer>().material.color = Color.white;
+//                break;
+//            case Globals.ElementType.Fire:
+//                this.GetComponent<Renderer>().material.color = Color.red;
+//                break;
+//            case Globals.ElementType.Water:
+//                this.GetComponent<Renderer>().material.color = Color.blue;
+//                break;
+//            case Globals.ElementType.Wind:
+//                this.GetComponent<Renderer>().material.color = Color.green;
+//                break;
+//            case Globals.ElementType.Earth:
+//                this.GetComponent<Renderer>().material.color = Color.yellow;
+//                break;
+//            case Globals.ElementType.Dark:
+//                this.GetComponent<Renderer>().material.color = Color.black;
+//                break;
+//        }
+//
+//    }
 }
